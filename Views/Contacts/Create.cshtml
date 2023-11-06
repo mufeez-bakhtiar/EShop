@@ -1,0 +1,58 @@
+﻿@model EShop.Models.Contact
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!-- Contact Start -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Contact Us</span></h2>
+    <div class="row px-xl-5">
+        <div class="col-lg-7 mb-5">
+            <div class="contact-form bg-light p-30">
+                <div id="success"></div>
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="control-group">
+                        <input asp-for="Name" class="form-control" id="name" placeholder="Your Name"
+                               required="required" data-validation-required-message="Please enter your name" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <input asp-for="Email" class="form-control" id="email" placeholder="Your Email"
+                               required="required" data-validation-required-message="Please enter your email" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <input asp-for="Subject" class="form-control" id="subject" placeholder="Subject"
+                               required="required" data-validation-required-message="Please enter a subject" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <textarea asp-for="Message" class="form-control" rows="8" id="message" placeholder="Message"
+                                  required="required"
+                                  data-validation-required-message="Please enter your message"></textarea>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">
+                            Send
+                            Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-5 mb-5">
+            <div class="bg-light p-30 mb-30">
+                <iframe  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Chenab%20Rangers,%20Sialkot,%20Pakistan+(ABcd)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" 
+                        frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+            </div>
+            <div class="bg-light p-30 mb-3">
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Outlet No. 3 Rangers Road</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>mufeezbakhtiar02@gmail.com</p>
+                <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>03174707070</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contact End -->
