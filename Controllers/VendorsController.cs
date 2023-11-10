@@ -12,16 +12,22 @@ namespace EShop.Controllers
     public class VendorsController : Controller
     {
         private readonly EshopContext _context;
-
-        public VendorsController(EshopContext context)
+        private readonly IWebHostEnvironment _environment;
+        public VendorsController(EshopContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         // GET: Vendors
         public async Task<IActionResult> Index()
         {
-              return _context.Vendors != null ? 
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
+            return _context.Vendors != null ? 
                           View(await _context.Vendors.ToListAsync()) :
                           Problem("Entity set 'EshopContext.Vendors'  is null.");
         }
@@ -29,6 +35,11 @@ namespace EShop.Controllers
         // GET: Vendors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id == null || _context.Vendors == null)
             {
                 return NotFound();
@@ -47,6 +58,10 @@ namespace EShop.Controllers
         // GET: Vendors/Create
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             return View();
         }
 
@@ -55,8 +70,20 @@ namespace EShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Image,Description,Address,PhoneNumber,Email")] Vendor vendor)
+        public async Task<IActionResult> Create([Bind("Id,Name,Image,Description,Address,PhoneNumber,Email")] Vendor vendor, IFormFile? file)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
+            var ImagePath = "/images/" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            using (FileStream dd = new FileStream(_environment.WebRootPath + ImagePath, FileMode.Create))
+            {
+                file.CopyTo(dd);
+            }
+            vendor.Image = ImagePath;
+
             if (ModelState.IsValid)
             {
                 _context.Add(vendor);
@@ -69,6 +96,11 @@ namespace EShop.Controllers
         // GET: Vendors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id == null || _context.Vendors == null)
             {
                 return NotFound();
@@ -89,6 +121,11 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Image,Description,Address,PhoneNumber,Email")] Vendor vendor)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id != vendor.Id)
             {
                 return NotFound();
@@ -120,6 +157,10 @@ namespace EShop.Controllers
         // GET: Vendors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id == null || _context.Vendors == null)
             {
                 return NotFound();
@@ -140,6 +181,10 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (_context.Vendors == null)
             {
                 return Problem("Entity set 'EshopContext.Vendors'  is null.");

@@ -84,8 +84,8 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         
-                        <a class="collapse-item" href="utilities-color.html">Add Item</a>
-                        <a class="collapse-item" href="utilities-border.html">All Items</a>
+                        <a class="collapse-item" asp-controller="Products" asp-action="Create">Add Item</a>
+                        <a class="collapse-item" asp-controller="Products" asp-action="Index">All Items</a>
                        
                     </div>
                 </div>
@@ -103,8 +103,8 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                        
-                        <a class="collapse-item" href="utilities-color.html">Add New Purchase</a>
-                        <a class="collapse-item" href="utilities-border.html">Purchase History</a>
+                        <a class="collapse-item" asp-controller="Purchases" asp-action="Create">Add New Purchase</a>
+                        <a class="collapse-item" asp-controller="Purchases" asp-action="Index">Purchase History</a>
                         
                     </div>
                 </div>
@@ -121,8 +121,8 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="utilities-color.html">Add New Vendors</a>
-                        <a class="collapse-item" href="utilities-border.html">All Vendors</a>
+                        <a class="collapse-item" asp-controller="Vendors" asp-action="Create">Add New Vendors</a>
+                        <a class="collapse-item" asp-controller="Vendors" asp-action="Index">All Vendors</a>
                         
                     </div>
                 </div>
@@ -157,8 +157,8 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="utilities-color.html">Add New User</a>
-                        <a class="collapse-item" href="utilities-border.html">All Users</a>
+                        <a class="collapse-item" asp-controller="Users" asp-action="Create" >Add New User</a>
+                        <a class="collapse-item" asp-controller="Users" asp-action="Index">All Users</a>
 
                     </div>
                 </div>
@@ -174,7 +174,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" asp-controller="Users" asp-action="Logout">
               
                     <span>LogOut</span>
                 </a>

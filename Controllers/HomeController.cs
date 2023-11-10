@@ -19,11 +19,23 @@ namespace EShop.Controllers
         {
             ViewBag.category = _context.Categories.ToList();
             ViewBag.featured = _context.FeaturedProducts.ToList();
+
+            var CategoriesList = _context.Categories.Select(m => m.Name).ToList();
+            HttpContext.Session.SetString("CategoriesList", String.Join(",", CategoriesList));
+            //return View();
+
+            var Categories = _context.Categories.ToList();
+            HttpContext.Session.SetString("Categories", String.Join(",", Categories));
             return View();
+
         }
 
         public IActionResult Admin()
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             return View();
         }
 

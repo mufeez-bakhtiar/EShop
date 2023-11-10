@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>MultiShop - Online Shop Website Template</title>
+    <title>EShop-Online SportsWear Company</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -89,13 +89,21 @@
                                 <a href="" class="dropdown-item">Baby's Dresses</a>
                             </div>
                         </div> *@
-                        <a asp-controller="Categories" asp-action="Shirts" class="nav-item nav-link">Shirts</a>
+                        @if(!string.IsNullOrEmpty(Context.Session.GetString("CategoriesList"))){
+                            var List = Context.Session.GetString("CategoriesList");
+                            var CommaSprited = List.Split(",");
+                            foreach(var items in CommaSprited)
+                            {
+                                <a asp-controller="Categories" asp-action="Products" asp-route-name="@items" class="nav-item nav-link">@items</a>
+                            }
+                        }
+@*                         <a asp-controller="Categories" asp-action="Shirts" class="nav-item nav-link">Shirts</a>
                         <a asp-controller="Categories" asp-action="Gloves" class="nav-item nav-link">Gloves</a>
                         <a asp-controller="Categories" asp-action="Jackets" class="nav-item nav-link">Jackets</a>
                         <a asp-controller="Categories" asp-action="Shorts" class="nav-item nav-link">Shorts</a>
                         <a asp-controller="Categories" asp-action="Bands" class="nav-item nav-link">Bands</a>
                         <a asp-controller="Categories" asp-action="Hoodies" class="nav-item nav-link">Hoodies</a>
-                        <a asp-controller="Categories" asp-action="Shoes" class="nav-item nav-link">Shoes</a>
+                        <a asp-controller="Categories" asp-action="Shoes" class="nav-item nav-link">Shoes</a> *@
                         
                     </div>
                 </nav>
@@ -114,13 +122,13 @@
                             <a asp-controller="Home" asp-action="Index" class="nav-item nav-link active">Home</a>
                             <a asp-controller="Categories" asp-action="Shop" class="nav-item nav-link">Shop</a>
                             
-                            <div class="nav-item dropdown">
+                            @* <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                    <a href="cart.html" class="dropdown-item">Shopping Cart</a>
-                                    <a href="checkout.html" class="dropdown-item">Checkout</a>
+                                  @*   <a href="cart.html" class="dropdown-item">Shopping Cart</a>
+                                    <a href="checkout.html" class="dropdown-item">Checkout</a> 
                                 </div>
-                            </div>
+                            </div> *@
                             <a asp-controller="Contacts" asp-action="Create" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
@@ -153,35 +161,33 @@
         <div class="row px-xl-5 pt-5">
             <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                 <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
-                <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor. Rebum tempor no vero est magna amet no</p>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+                <p class="mb-4">We are manufacturers of sports wear. Feel free to contact us!</p>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Rangers Road, Sialkot.</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>EShop@gmail.com</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>03174707070</p>
             </div>
             <div class="col-lg-8 col-md-12">
                 <div class="row">
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Quick Shop</h5>
                         <div class="d-flex flex-column justify-content-start">
+                            <a class="text-secondary mb-2" asp-controller="Home" asp-action="Index"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-secondary mb-2" asp-controller="Categories" asp-action="Shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                            
+                            <a class="text-secondary" asp-controller="Contacts" asp-action="Create"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                        </div>
+                    </div>
+                   @*  <div class="col-md-4 mb-5"> *@
+                       @*  <h5 class="text-secondary text-uppercase mb-4">My Account</h5> *@
+                        @* <div class="d-flex flex-column justify-content-start">
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>
-                    </div>
+                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a> *@
+                        @* </div> *@
+                    @* </div> *@
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
                         <p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>

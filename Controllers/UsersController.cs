@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using EShop.Models;
 using EShop.DTOs;
 using SQLitePCL;
+using Microsoft.AspNetCore.Http;
 
 namespace EShop.Controllers
 {
@@ -19,10 +20,15 @@ namespace EShop.Controllers
         {
             _context = context;
         }
+      
 
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            if(HttpContext.Session.GetString("Username")==null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
               return _context.Users != null ? 
                           View(await _context.Users.ToListAsync()) :
                           Problem("Entity set 'EshopContext.Users'  is null.");
@@ -31,19 +37,29 @@ namespace EShop.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (HttpContext.Session.GetString("Username") != null)
             {
-                return NotFound();
-            }
+                if(id == null || _context.Users == null)
+                {
+                    return NotFound();
+                }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+
+                var user = await _context.Users
+               .FirstOrDefaultAsync(m => m.Id == id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                return View(user);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction(nameof(Login));
             }
-
-            return View(user);
+            
+           
         }
 
         // GET: Users/Create
@@ -78,7 +94,7 @@ namespace EShop.Controllers
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Login));
             }
             return View(user);
         }
@@ -86,17 +102,21 @@ namespace EShop.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (HttpContext.Session.GetString("Username") != null)
             {
-                return NotFound();
-            }
+                if (id == null || _context.Users == null)
+                {
+                    return NotFound();
+                }
 
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
+                var user = await _context.Users.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return View(user);
             }
-            return View(user);
+            else return RedirectToAction(nameof(Login));
         }
 
         // POST: Users/Edit/5
@@ -106,6 +126,10 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Cnic,Email,PhoneNumber,SystemUserId,Address,Role")] User user)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
             if (id != user.Id)
             {
                 return NotFound();
@@ -137,7 +161,12 @@ namespace EShop.Controllers
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+            
+                if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
@@ -174,6 +203,37 @@ namespace EShop.Controllers
         private bool UserExists(int id)
         {
           return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public IActionResult Dashboard()
+        {
+            ViewBag.Categories = _context.Categories.Count();
+            ViewBag.Users = _context.Users.Count();
+            ViewBag.Vendors = _context.Vendors.Count();
+            ViewBag.Products = _context.Products.Count();
+
+            return View();
+        }
+
+        public IActionResult Login(Loginss logins)
+        {
+            var login = _context.SystemUsers.Where(m=> m.Username == logins.Username && m.Password==logins.Password).FirstOrDefault();
+           if (login == null)
+            {
+                return View();
+            }
+           
+            HttpContext.Session.SetString("Username", login.Username);
+            
+            return RedirectToAction(nameof(Dashboard));
+        }
+
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            
+            return RedirectToAction(nameof(Login));
         }
     }
 }

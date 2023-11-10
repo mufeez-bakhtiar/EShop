@@ -15,6 +15,7 @@ namespace EShop.Controllers
         private readonly EshopContext _context;
         private readonly IWebHostEnvironment _environment;
 
+       
         public CategoriesController(EshopContext context, IWebHostEnvironment environment)
         {
             _context = context;
@@ -24,6 +25,11 @@ namespace EShop.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login),"Users");
+            }
+                ViewBag.Count = _context.Categories.Count();
               return _context.Categories != null ? 
                           View(await _context.Categories.ToListAsync()) :
                           Problem("Entity set 'EshopContext.Categories'  is null.");
@@ -32,6 +38,10 @@ namespace EShop.Controllers
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id == null || _context.Categories == null)
             {
                 return NotFound();
@@ -50,6 +60,10 @@ namespace EShop.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             return View();
         }
 
@@ -60,7 +74,10 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Image")] Category category, IFormFile? file )
         {
-
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             var ImagePath = "/images/" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             using( FileStream dd = new FileStream (_environment.WebRootPath + ImagePath, FileMode.Create))
             {
@@ -80,6 +97,11 @@ namespace EShop.Controllers
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id == null || _context.Categories == null)
             {
                 return NotFound();
@@ -100,6 +122,11 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Image")] Category category)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id != category.Id)
             {
                 return NotFound();
@@ -131,6 +158,11 @@ namespace EShop.Controllers
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id == null || _context.Categories == null)
             {
                 return NotFound();
@@ -151,6 +183,11 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (_context.Categories == null)
             {
                 return Problem("Entity set 'EshopContext.Categories'  is null.");
@@ -172,63 +209,65 @@ namespace EShop.Controllers
 
 
 
-        public IActionResult Jackets()
+        //public IActionResult Jackets()
+        //{
+        //    var jacket = (from d in _context.Products
+        //                 where d.Name == "Jackets"
+        //                 select d).ToList();
+        //    return View(jacket);
+        //}
+
+        //public IActionResult Shoes()
+        //{
+            //if (HttpContext.Session.GetString("Username") == null)
+            //{
+            //    return RedirectToAction(nameof(UsersController.Login),"Users");
+            //}
+        //    var shoes = (from d in _context.Products
+        //                 where d.Name == "Shoes"
+        //                 select d).ToList();
+        //    return View(shoes);
+        //}
+
+        //public IActionResult Shorts()
+        //{
+        //    var shorts = (from d in _context.Products
+        //                 where d.Name == "Shorts"
+        //                 select d).ToList();
+        //    return View(shorts);
+        //}
+
+        //public IActionResult Hoodies()
+        //{
+        //    var hoodie = (from d in _context.Products
+        //                 where d.Name == "Hoodies"
+        //                 select d).ToList();
+        //    return View(hoodie);
+        //}
+
+
+        public async Task<IActionResult> Products(string name = "")
         {
-            var jacket = (from d in _context.Products
-                         where d.Name == "Jackets"
-                         select d).ToList();
-            return View(jacket);
+            var Product = _context.Products.Where(m => m.Name == name).ToList();
+            return View(Product);
         }
 
-        public IActionResult Shoes()
-        {
-            var shoes = (from d in _context.Products
-                         where d.Name == "Shoes"
-                         select d).ToList();
-            return View(shoes);
-        }
-
-        public IActionResult Shorts()
-        {
-            var shorts = (from d in _context.Products
-                         where d.Name == "Shorts"
-                         select d).ToList();
-            return View(shorts);
-        }
-
-        public IActionResult Hoodies()
-        {
-            var hoodie = (from d in _context.Products
-                         where d.Name == "Hoodies"
-                         select d).ToList();
-            return View(hoodie);
-        }
 
 
-        public async Task<IActionResult> Shirts()
-        {
-            var shirt = (from d in _context.Products
-                       where d.Name == "Shirts"
-                       select d).ToList();
-            return View(shirt);
-        }
-
-
-
-        public IActionResult Gloves()
-        {
-            var gloves = (from d in _context.Products
-                         where d.Name == "Gloves"
-                         select d).ToList();
-            return View(gloves);
-        }
-        public IActionResult Bands()
-        {
-            var Bands = (from d in _context.Products
-                         where d.Name == "Bands"
-                         select d).ToList();
-            return View(Bands);
-        }
+        //public IActionResult Gloves()
+        //{
+        //    var gloves = (from d in _context.Products
+        //                 where d.Name == "Gloves"
+        //                 select d).ToList();
+        //    return View(gloves);
+        //}
+        //public IActionResult Bands()
+        //{
+        //    var Bands = (from d in _context.Products
+        //                 where d.Name == "Bands"
+        //                 select d).ToList();
+        //    return View(Bands);
+        //}
 
         public async Task<IActionResult> Shop()
         {
@@ -237,8 +276,11 @@ namespace EShop.Controllers
                         Problem("Entity set 'EshopContext.Categories'  is null.");
         }
 
+
+
         public async Task<IActionResult> ProductDetail(int? id)
         {
+           
             if (id == null || _context.Products == null)
             {
                 return NotFound();
@@ -257,6 +299,24 @@ namespace EShop.Controllers
         public IActionResult Cart()
         {
             return View();
+        }
+
+        public async Task<IActionResult> FDetail(int? id)
+        {
+
+            if (id == null || _context.FeaturedProducts == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.FeaturedProducts
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
         }
     }
 }

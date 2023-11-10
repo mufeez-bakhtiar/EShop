@@ -21,7 +21,11 @@ namespace EShop.Controllers
         // GET: Contacts
         public async Task<IActionResult> Index()
         {
-              return _context.Contacts != null ? 
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+            return _context.Contacts != null ? 
                           View(await _context.Contacts.ToListAsync()) :
                           Problem("Entity set 'EshopContext.Contacts'  is null.");
         }
@@ -29,6 +33,11 @@ namespace EShop.Controllers
         // GET: Contacts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id == null || _context.Contacts == null)
             {
                 return NotFound();
@@ -61,7 +70,7 @@ namespace EShop.Controllers
             {
                 _context.Add(contact);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Dashboard));
             }
             return View(contact);
         }
@@ -69,6 +78,10 @@ namespace EShop.Controllers
         // GET: Contacts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id == null || _context.Contacts == null)
             {
                 return NotFound();
@@ -89,6 +102,11 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Subject,Message")] Contact contact)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id != contact.Id)
             {
                 return NotFound();
@@ -120,6 +138,11 @@ namespace EShop.Controllers
         // GET: Contacts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id == null || _context.Contacts == null)
             {
                 return NotFound();
@@ -140,6 +163,11 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (_context.Contacts == null)
             {
                 return Problem("Entity set 'EshopContext.Contacts'  is null.");
@@ -157,6 +185,17 @@ namespace EShop.Controllers
         private bool ContactExists(int id)
         {
           return (_context.Contacts?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public IActionResult Dashboard()
+        {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+            ViewBag.category = _context.Categories.ToList();
+            ViewBag.featured = _context.FeaturedProducts.ToList();
+            return View();
         }
     }
 }

@@ -20,6 +20,7 @@ namespace EShop.Models
         public virtual DbSet<Contact> Contacts { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<FeaturedProduct> FeaturedProducts { get; set; } = null!;
+        public virtual DbSet<Newsletter> Newsletters { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Purchase> Purchases { get; set; } = null!;
         public virtual DbSet<SystemUser> SystemUsers { get; set; } = null!;
@@ -109,6 +110,15 @@ namespace EShop.Models
                 entity.Property(e => e.Price)
                     .HasMaxLength(250)
                     .HasColumnName("price");
+            });
+
+            modelBuilder.Entity<Newsletter>(entity =>
+            {
+                entity.ToTable("newsletter");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Email).HasColumnName("email");
             });
 
             modelBuilder.Entity<Product>(entity =>

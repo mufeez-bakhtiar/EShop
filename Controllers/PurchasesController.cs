@@ -21,7 +21,11 @@ namespace EShop.Controllers
         // GET: Purchases
         public async Task<IActionResult> Index()
         {
-              return _context.Purchases != null ? 
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+            return _context.Purchases != null ? 
                           View(await _context.Purchases.ToListAsync()) :
                           Problem("Entity set 'EshopContext.Purchases'  is null.");
         }
@@ -29,6 +33,10 @@ namespace EShop.Controllers
         // GET: Purchases/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id == null || _context.Purchases == null)
             {
                 return NotFound();
@@ -47,6 +55,10 @@ namespace EShop.Controllers
         // GET: Purchases/Create
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             return View();
         }
 
@@ -57,6 +69,10 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Category,Description,VendorName,DateOfPurchase")] Purchase purchase)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(purchase);
@@ -69,6 +85,11 @@ namespace EShop.Controllers
         // GET: Purchases/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+
             if (id == null || _context.Purchases == null)
             {
                 return NotFound();
@@ -89,6 +110,10 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Category,Description,VendorName,DateOfPurchase")] Purchase purchase)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id != purchase.Id)
             {
                 return NotFound();
@@ -120,6 +145,10 @@ namespace EShop.Controllers
         // GET: Purchases/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id == null || _context.Purchases == null)
             {
                 return NotFound();
@@ -140,6 +169,10 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (_context.Purchases == null)
             {
                 return Problem("Entity set 'EshopContext.Purchases'  is null.");

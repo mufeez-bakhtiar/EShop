@@ -24,7 +24,12 @@ namespace EShop.Controllers
         // GET: FeaturedProducts
         public async Task<IActionResult> Index()
         {
-              return _context.FeaturedProducts != null ? 
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
+            ViewBag.Count = _context.Categories.Count();
+            return _context.FeaturedProducts != null ? 
                           View(await _context.FeaturedProducts.ToListAsync()) :
                           Problem("Entity set 'EshopContext.FeaturedProducts'  is null.");
         }
@@ -32,6 +37,10 @@ namespace EShop.Controllers
         // GET: FeaturedProducts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id == null || _context.FeaturedProducts == null)
             {
                 return NotFound();
@@ -79,6 +88,10 @@ namespace EShop.Controllers
         // GET: FeaturedProducts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id == null || _context.FeaturedProducts == null)
             {
                 return NotFound();
@@ -99,6 +112,10 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Image,Price")] FeaturedProduct featuredProduct)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id != featuredProduct.Id)
             {
                 return NotFound();
@@ -130,6 +147,10 @@ namespace EShop.Controllers
         // GET: FeaturedProducts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (id == null || _context.FeaturedProducts == null)
             {
                 return NotFound();
@@ -150,6 +171,10 @@ namespace EShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction(nameof(UsersController.Login), "Users");
+            }
             if (_context.FeaturedProducts == null)
             {
                 return Problem("Entity set 'EshopContext.FeaturedProducts'  is null.");
